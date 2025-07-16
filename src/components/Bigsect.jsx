@@ -34,7 +34,7 @@ const Bigsect = ({ city, setCity, theme }) => {
     } catch (error) {
       console.error("Error fetching weather data:", error);
     } finally {
-      setSubmitted(false); // Reset submitted state after search completes
+      setSubmitted(false);
     }
   };
 
@@ -78,10 +78,14 @@ const Bigsect = ({ city, setCity, theme }) => {
       className={`transition-colors duration-500 ease-in-out ${
         theme === "dark"
           ? "bg-[#2a2a2a] text-white"
-          : "bg-[rgb(197,196,196)] text-[rgb(105,105,105)] "
+          : "bg-[rgb(197,196,196)] text-[rgb(105,105,105)]"
       } w-full md:w-[80%] lg:w-[60%] h-auto md:h-[90vh] rounded-none md:rounded-l-4xl flex flex-col px-4 py-6`}
     >
-      <div className={`flex lg:flex-row sm:flex-col md:flex-col justify-between items-center text-black text-base md:text-lg font-semibold mb-6 px-2 md:px-10 ${theme === "dark" ? "text-white" : "text-black"}`}>
+      <div
+        className={`flex lg:flex-row sm:flex-col md:flex-col justify-between items-center text-black text-base md:text-lg font-semibold mb-6 px-2 md:px-10 ${
+          theme === "dark" ? "text-white" : "text-black"
+        }`}
+      >
         <h3>{weatherData?.location || "Loading..."}</h3>
         <h3>{today}</h3>
       </div>
@@ -89,40 +93,46 @@ const Bigsect = ({ city, setCity, theme }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setSubmitted(true); // mark that the user submitted manually
+          setSubmitted(true);
           if (city.trim() !== "") {
             search(city);
           }
         }}
-        className="flex px-2 w-auto"
+        className="flex px-2 w-full"
       >
-        <input
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className={`${
-            theme === "dark"
-              ? "bg-[#2a2a2a] text-gray-300 shadow-gray-400"
-              : "bg-transparent text-gray-600 shadow-black"
-          } w-full   justify-center items-center  shadow-lg rounded-lg md:rounded-l-lg px-4 py-2 font-medium text-base`}
-          placeholder="Enter your city"
-        />
+        <div className="relative w-full">
+          <FaSearch
+            className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            }`}
+          />
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            placeholder="Enter your city"
+            aria-label="City name"
+            autoComplete="off"
+            className={`${
+              theme === "dark"
+                ? "bg-[#2a2a2a] text-gray-300 placeholder-gray-500 shadow-gray-400"
+                : "bg-transparent text-gray-600 placeholder-gray-400 shadow-black"
+            } w-full pl-10 shadow-lg rounded-lg md:rounded-l-lg px-4 py-2 font-medium text-base focus:outline-none focus:ring-2 focus:ring-gray-800`}
+          />
+        </div>
       </form>
+
       {weatherData ? (
         <div
           className={`${
-            theme === "dark"
-              ? " text-gray-300"
-              : " text-gray-600"
-          } bg-transparent flex flex-col md:flex-row justify-center items-center text-gray-600 mt-10 gap-10`}
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
+          } bg-transparent flex flex-col md:flex-row justify-center items-center mt-10 gap-10`}
         >
           <div>
             <h1
               className={`${
-                theme === "dark"
-                  ? " text-gray-300"
-                  : " text-gray-600"
-              } bg-transparent text-7xl md:text-[10rem] font-semibold text-shadow-lg text-shadow-black text-center`}
+                theme === "dark" ? "text-gray-300" : "text-gray-600"
+              } bg-transparent text-7xl md:text-[10rem] font-semibold text-center`}
             >
               {weatherData.temperature}°
             </h1>
@@ -155,12 +165,12 @@ const Bigsect = ({ city, setCity, theme }) => {
               theme === "dark"
                 ? "bg-[#2a2a2a] text-gray-300 shadow-gray-400"
                 : "bg-transparent text-gray-600 shadow-black"
-            } border w-24 h-32 rounded-xl shadow-lg  flex justify-evenly items-center flex-col`}
+            } border w-24 h-32 rounded-xl shadow-lg flex justify-evenly items-center flex-col`}
           >
             <h2
-              className={`font-semibold text-black ${
+              className={`font-semibold ${
                 theme === "dark" ? "text-white" : "text-black"
-              } `}
+              }`}
             >
               {day.day}
             </h2>

@@ -5,7 +5,7 @@ import Bigsect from "./components/Bigsect";
 import { FaMoon, FaSun } from "react-icons/fa";
 
 const WeatherApp = () => {
-  const [city, setCity] = useState(" "); // Default city
+  const [city, setCity] = useState("Enter your location"); // Default city
   const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
