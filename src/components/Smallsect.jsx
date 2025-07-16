@@ -70,7 +70,7 @@ const Smallsect = ({ city, theme }) => {
 
   return (
     <div
-      className={`transition-colors duration-500 ease-in-out w-full md:w-[25%] h-auto md:h-[90vh] rounded-r-4xl flex flex-col 
+      className={`transition-colors duration-500 ease-in-out w-full md:w-[25%]  sm:rounded-r-none h-auto md:h-[90vh] lg:rounded-r-4xl flex flex-col 
       ${
         theme === "dark"
           ? "bg-[#1c1c1c] text-white"
