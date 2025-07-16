@@ -112,17 +112,17 @@ const Bigsect = ({ city, setCity, theme }) => {
         <div
           className={`${
             theme === "dark"
-              ? "bg-[#2a2a2a] text-gray-300"
-              : "bg-transparent text-gray-600"
-          } flex flex-col md:flex-row justify-center items-center text-gray-600 mt-10 gap-10`}
+              ? " text-gray-300"
+              : " text-gray-600"
+          } bg-transparent flex flex-col md:flex-row justify-center items-center text-gray-600 mt-10 gap-10`}
         >
           <div>
             <h1
               className={`${
                 theme === "dark"
-                  ? "bg-[#2a2a2a] text-gray-300"
-                  : "bg-transparent text-gray-600 "
-              }text-7xl md:text-[10rem] font-semibold text-shadow-lg text-shadow-black text-center`}
+                  ? " text-gray-300"
+                  : " text-gray-600"
+              } bg-transparent text-7xl md:text-[10rem] font-semibold text-shadow-lg text-shadow-black text-center`}
             >
               {weatherData.temperature}°
             </h1>
