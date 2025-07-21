@@ -1,4 +1,3 @@
-// Bigsect.jsx
 import React, { useEffect, useState } from "react";
 import { LuWind } from "react-icons/lu";
 import { BsDroplet } from "react-icons/bs";
@@ -38,36 +37,51 @@ const Bigsect = ({ city, setCity, theme }) => {
     }
   };
 
-  const generateNext7Days = () => {
-    const today = new Date();
-    const newDays = [];
+  const fetchDailyForecast = async () => {
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${
+          import.meta.env.VITE_APP_ID
+        }`
+      );
+      const data = await response.json();
 
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-
-      const dayName = date.toLocaleDateString("en-GB", { weekday: "short" });
-      const formattedDate = date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
+      const grouped = {};
+      data.list.forEach((item) => {
+        const rawDate = item.dt_txt.split(" ")[0]; // format: "2025-07-18"
+        if (!grouped[rawDate]) grouped[rawDate] = [];
+        grouped[rawDate].push(item);
       });
 
-      newDays.push({
-        id: i,
-        day: dayName,
-        date: formattedDate,
-        temp: "20°", // placeholder
-        condition: "Cloudy", // placeholder
-      });
+      const daily = Object.entries(grouped)
+        .slice(0, 7)
+        .map(([rawDate, items], i) => {
+          const temps = items.map((i) => i.main.temp);
+          const avgTemp = Math.round(
+            temps.reduce((acc, val) => acc + val, 0) / temps.length
+          );
+
+          const jsDate = new Date(rawDate); // Safe to parse
+
+          return {
+            id: i,
+            date: rawDate,
+            day: jsDate.toLocaleDateString("en-GB", { weekday: "short" }),
+            temp: `${avgTemp}°`,
+            condition: items[0].weather[0].main,
+          };
+        });
+
+      setDays(daily);
+    } catch (error) {
+      console.error("Error fetching daily forecast:", error);
     }
-
-    setDays(newDays);
   };
 
   useEffect(() => {
     if (city) {
       search(city);
-      generateNext7Days();
+      fetchDailyForecast();
     }
   }, [city]);
 
@@ -81,6 +95,7 @@ const Bigsect = ({ city, setCity, theme }) => {
           : "bg-[rgb(197,196,196)] text-[rgb(105,105,105)]"
       } w-full md:w-[80%] lg:w-[60%] h-auto md:h-[90vh] rounded-none md:rounded-l-4xl flex flex-col px-4 py-6`}
     >
+      <h1 className="font-semibold text-[15px]">This is a site where you can input your location to check what the weather looks like in next six hours and next five days</h1>
       <div
         className={`flex lg:flex-row sm:flex-col md:flex-col justify-between items-center text-black text-base md:text-lg font-semibold mb-6 px-2 md:px-10 ${
           theme === "dark" ? "text-white" : "text-black"
@@ -96,6 +111,7 @@ const Bigsect = ({ city, setCity, theme }) => {
           setSubmitted(true);
           if (city.trim() !== "") {
             search(city);
+            fetchDailyForecast();
           }
         }}
         className="flex px-2 w-full"
@@ -132,7 +148,7 @@ const Bigsect = ({ city, setCity, theme }) => {
             <h1
               className={`${
                 theme === "dark" ? "text-gray-300" : "text-gray-600"
-              } bg-transparent text-7xl md:text-[10rem] font-semibold text-center`}
+              } bg-transparent text-7xl md:text-[10rem] font-semibold text-center text-shadow-black text-shadow-lg`}
             >
               {weatherData.temperature}°
             </h1>
